@@ -1,0 +1,25 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "name": "Gokhan Turkmen",
+      "tckn": "2929292929888",
+      "phone": "05455454545",
+      "birthPlace": "Canakkale"
+    },
+    {
+      "id": "2",
+      "name": "Fatma Turunc",
+      "tckn": "232232322222",
+      "phone": "05305303030",
+      "birthPlace": "Istanbul"
+    },
+	{
+      "id": "1",
+      "name": "Gizem Taskin",
+      "tckn": "123456678999",
+      "phone": "05305303030",
+      "birthPlace": "Biga"
+    }
+  ]
+}

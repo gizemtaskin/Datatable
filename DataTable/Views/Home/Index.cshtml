@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <style>
+        td.details-control {
+            background: url('/Content/DataTables/images/details_open.png') no-repeat center center;
+            cursor: pointer;
+        }
+
+        tr.shown td.details-control {
+            background: url('/Content/DataTables/images/details_close.png') no-repeat center center;
+        }
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+    </style>
+</head>
+<body>
+    <button id="myBtn">Open Modal</button>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <table id="modalTable" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Ad Soyad</th>
+                        <th>Tc No</th>
+                        <th>Doğum Yeri</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Kişi</th>
+                <th>Tckn</th>
+                <th>Telefon</th>
+            </tr>
+        </thead>
+    </table>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
+
+    <script>
+        var modal = document.getElementById("myModal");
+        var btn = document.getElementById("myBtn");
+        var span = document.getElementsByClassName("close")[0];
+        btn.onclick = function () {
+            modal.style.display = "block";
+        }
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        function format(d) {
+            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                '<tr>' +
+                '<td>Ad Soyad:</td>' +
+                '<td>' + d.name + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Tc No:</td>' +
+                '<td>' + d.tckn + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Telefon:</td>' +
+                '<td>' + d.phone + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Doğum yeri:</td>' +
+                '<td>' + d.birthPlace + '</td>' +
+                '</tr>' +
+                '</table>';
+        }
+
+        $(document).ready(function () {
+            var table = $('#example').DataTable({
+                "ajax": "/Resources/ajax.txt",
+                "columns": [
+                    {
+                        "className": 'details-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": ''
+                    },
+                    { "data": "name" },
+                    { "data": "tckn" },
+                    { "data": "phone" }
+                ],
+                "order": [[1, 'asc']]
+            });
+
+
+            $('#example tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+
+                if (row.child.isShown()) {
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    row.child(format(row.data())).show();
+                    tr.addClass('shown');
+                }
+            });
+
+            $('#example tbody').on('click', 'td.sorting_1', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+                window.alert("Ad Soyad:" + row.data().name + "\n" + "Tc No:" + row.data().tckn + "\n" + "Doğum Yeri:" + row.data().birthPlace);
+            });
+
+            $('#myBtn').on('click', '', function () {
+                $('#modalTable').DataTable({
+                    "ajax": "/Resources/ajax.txt",
+                    "columns": [
+                        {
+                            "className": 'details-control',
+                            "orderable": false,
+                            "data": null,
+                            "defaultContent": ''
+                        },
+                        { "data": "name" },
+                        { "data": "tckn" },
+                        { "data": "birthPlace" }
+                    ],
+                    "order": [[1, 'asc']]
+                });
+            });
+        });
+    </script>
+</body>
+</html>
